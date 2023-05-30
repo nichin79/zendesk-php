@@ -1,0 +1,20 @@
+{
+    "name": "nichin79/zendesk-php",
+    "description": "PHP Library for Zendesk",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Nicklas H",
+            "email": "nicklas@imagineit.nu"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+      "psr-4": {
+        "Nichin79\\Zendesk\\": "src/"
+      }
+    },
+    "require": {
+        "nichin79/curl": "dev-main"
+    }
+}
