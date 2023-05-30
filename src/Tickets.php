@@ -18,4 +18,14 @@ class Tickets
     $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets/' . $ticketId . '.json';
     return Curl::exec($payload);
   }
+
+  public function update(int $ticketId, string $data)
+  {
+    $payload = $this->payload;
+    $payload['method'] = 'PUT';
+    $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets/' . $ticketId . '.json';
+    $payload['headers'] = ["Content-Type: application/json"];
+    $payload['data'] = $data;
+    return Curl::exec($payload);
+  }
 }

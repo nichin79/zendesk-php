@@ -1,6 +1,7 @@
 # Composer artifact files
 vendor/
 composer.lock
+.env
 
 # Node artifact files
 .npmrc
