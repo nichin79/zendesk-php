@@ -8,7 +8,7 @@ class Zendesk
   protected array $payload = [];
 
   public Tickets $tickets;
-  public Export $export;
+  public Search $search;
 
   public function __construct(array $conf)
   {
@@ -24,7 +24,7 @@ class Zendesk
     }
 
     $this->tickets = new Tickets($this->payload);
-    $this->export = new Export($this->payload);
+    $this->search = new Search($this->payload);
   }
 
   public function tickets()
