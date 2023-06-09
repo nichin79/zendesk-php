@@ -1,106 +1,164 @@
 <?php
 namespace Nichin79\Zendesk;
 
-use Nichin79\Curl\Curl;
+use Nichin79\Curl\BasicCurl;
 
 class Tickets
 {
-  protected array $payload = [];
-  public function __construct(array $payload)
+  protected array $data = [];
+  public function __construct(array $data)
   {
-    $this->payload = $payload;
+    $this->data = $data;
   }
 
-  public function listTickets()
+  public function list()
   {
-    $payload = $this->payload;
-    $payload['method'] = 'GET';
-    $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets';
-    return Curl::exec($payload);
+    $data = $this->data;
+    $data['method'] = 'GET';
+    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets';
+    return new BasicCurl($data);
   }
 
-  public function listRecent()
+  public function list_recent()
   {
-    $payload = $this->payload;
-    $payload['method'] = 'GET';
-    $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets/recent';
-    return Curl::exec($payload);
+    $data = $this->data;
+    $data['method'] = 'GET';
+    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/recent';
+    return new BasicCurl($data);
+  }
+
+  public function list_deleted()
+  {
+    $data = $this->data;
+    $data['method'] = 'GET';
+    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/deleted_tickets';
+    return new BasicCurl($data);
   }
 
   public function count()
   {
-    $payload = $this->payload;
-    $payload['method'] = 'GET';
-    $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets/count';
-    return Curl::exec($payload);
+    $data = $this->data;
+    $data['method'] = 'GET';
+    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/count';
+    return new BasicCurl($data);
   }
 
-  public function showTicket(int $ticketId)
+  public function show(int $ticketId)
   {
-    $payload = $this->payload;
-    $payload['method'] = 'GET';
-    $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets/' . $ticketId . '.json';
-    return Curl::exec($payload);
+    $data = $this->data;
+    $data['method'] = 'GET';
+    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/' . $ticketId . '.json';
+    return new BasicCurl($data);
   }
 
-  public function showMany(array $ticketIds)
+  public function show_many(array $ticketIds)
   {
-    $ticketIds = implode(',',$ticketIds);
-    $payload = $this->payload;
-    $payload['method'] = 'GET';
-    $payload['url'] = 'https://' . $payload['subdomain'] . ".zendesk.com/api/v2/tickets/show_many.json?ids=$ticketIds";
-    return Curl::exec($payload);
+    $ticketIds = implode(',', $ticketIds);
+    $data = $this->data;
+    $data['method'] = 'GET';
+    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/tickets/show_many.json?ids=$ticketIds";
+    return new BasicCurl($data);
   }
 
-  public function createTicket(string $data)
+  public function create(string $data)
   {
-    $payload = $this->payload;
-    $payload['method'] = 'POST';
-    $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets.json';
-    $payload['headers'] = ["Content-Type: application/json"];
-    $payload['data'] = $data;
-    return Curl::exec($payload);
+    $data = $this->data;
+    $data['method'] = 'POST';
+    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets.json';
+    $data['headers'] = ["Content-Type: application/json"];
+    $data['data'] = $data;
+    return new BasicCurl($data);
   }
 
-  public function createMany(string $data)
+  public function create_many(string $data)
   {
-    $payload = $this->payload;
-    $payload['method'] = 'POST';
-    $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets/create_many.json';
-    $payload['headers'] = ["Content-Type: application/json"];
-    $payload['data'] = $data;
-    return Curl::exec($payload);
+    $data = $this->data;
+    $data['method'] = 'POST';
+    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/create_many.json';
+    $data['headers'] = ["Content-Type: application/json"];
+    $data['data'] = $data;
+    return new BasicCurl($data);
   }
 
-  public function updateTicket(int $ticketId, string $data)
+  public function update(int $ticketId, string $data)
   {
-    $payload = $this->payload;
-    $payload['method'] = 'PUT';
-    $payload['url'] = 'https://' . $payload['subdomain'] . '.zendesk.com/api/v2/tickets/' . $ticketId . '.json';
-    $payload['headers'] = ["Content-Type: application/json"];
-    $payload['data'] = $data;
-    return Curl::exec($payload);
+    $data = $this->data;
+    $data['method'] = 'PUT';
+    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/' . $ticketId . '.json';
+    $data['headers'] = ["Content-Type: application/json"];
+    $data['data'] = $data;
+    return new BasicCurl($data);
   }
 
-  public function updateMany(array $ticketIds, string $data)
+  public function update_many(array $ticketIds, string $data)
   {
     // IMPORTANT NOTE!
     // The ticket id's should only be specified in either $ticketIds or in $data, not a combination of both
     // Specifying id's in $data will have higher priority than $ticketIds
-    
+
+    $ids = '';
     if (count($ticketIds) > 0) {
-      $ticketIds = '?ids=' . implode(',',$ticketIds);
-    } else {
-      $ticketIds = '';
+      $ids = '?ids=' . implode(',', $ticketIds);
     }
 
-    $payload = $this->payload;
-    $payload['method'] = 'PUT';
-    $payload['url'] = 'https://' . $payload['subdomain'] . ".zendesk.com/api/v2/tickets/update_many.json$ticketIds";
-    $payload['headers'] = ["Content-Type: application/json"];
-    $payload['data'] = $data;
+    $data = $this->data;
+    $data['method'] = 'PUT';
+    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/tickets/update_many.json$ids";
+    $data['headers'] = ["Content-Type: application/json"];
+    $data['data'] = $data;
 
-    var_dump($payload);
-    return Curl::exec($payload);
+    var_dump($data);
+    return new BasicCurl($data);
+  }
+
+  public function delete(int $ticketId)
+  {
+    $data = $this->data;
+    $data['method'] = 'DELETE';
+    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/tickets/$ticketId.json";
+    return new BasicCurl($data);
+  }
+
+  public function delete_many(array $ticketIds)
+  {
+    $ticketIds = implode(',', $ticketIds);
+    $data = $this->data;
+    $data['method'] = 'DELETE';
+    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/tickets/destroy_many?ids=$ticketIds";
+    return new BasicCurl($data);
+  }
+
+  public function restore(int $ticketId)
+  {
+    $data = $this->data;
+    $data['method'] = 'PUT';
+    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/deleted_tickets/$ticketId/restore.json";
+    return new BasicCurl($data);
+  }
+
+  public function restore_many(array $ticketIds)
+  {
+    $ticketIds = implode(',', $ticketIds);
+    $data = $this->data;
+    $data['method'] = 'PUT';
+    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/deleted_tickets/restore_many?ids=$ticketIds";
+    return new BasicCurl($data);
+  }
+
+  public function delete_permanently(int $ticketId)
+  {
+    $data = $this->data;
+    $data['method'] = 'DELETE';
+    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/deleted_tickets/$ticketId.json";
+    return new BasicCurl($data);
+  }
+
+  public function delete_many_permanently(array $ticketIds)
+  {
+    $ticketIds = implode(',', $ticketIds);
+    $data = $this->data;
+    $data['method'] = 'DELETE';
+    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/deleted_tickets/destroy_many?ids=$ticketIds";
+    return new BasicCurl($data);
   }
 }
