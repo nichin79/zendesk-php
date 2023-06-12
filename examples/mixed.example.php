@@ -6,7 +6,7 @@ use Nichin79\Zendesk\Zendesk;
 $zendesk = new Zendesk($config['zendesk']);
 
 $query = [
-  'page[size]' => 5,
+  'page[size]' => 10,
   'filter[type]' => 'ticket',
   'query' => 'created>"2022-05-31"',
   'page[after]' => '',

@@ -14,10 +14,20 @@ class Tickets
   {
     $this->data = $data;
 
-    $this->comments = new Comments($this->data);
-    // load_modules();
-    // \__NAMESPACE__::load_modules(__NAMESPACE__ . '\\Tickets\\', $this->data['modules']['tickets']);
-    // \Nichin79\Zendesk\Zendesk::load_modules(__NAMESPACE__ . '\\Tickets\\', $this->data['modules']['tickets']);
+    foreach ($this->data['modules']['tickets'] as $key => $value) {
+      if (gettype($this->data['modules']['tickets'][$key]) === 'array') {
+        $class = ucfirst(strtolower($key));
+      }
+      if (gettype($this->data['modules']['tickets'][$key]) === 'string') {
+        $class = ucfirst(strtolower($value));
+      }
+
+      switch ($class) {
+        case 'Comments';
+          $this->comments = new Comments($this->data);
+          break;
+      }
+    }
 
   }
 
