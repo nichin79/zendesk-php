@@ -5,7 +5,8 @@ use Nichin79\Zendesk\Zendesk;
 
 $zendesk = new Zendesk($config['zendesk']);
 // $request = $zendesk->users();
-$request = $zendesk->tickets->show(6199);
+// $request = $zendesk->tickets->show(6199);
+// $request = $zendesk->users->compliance_deletion_statuses(374834345140, 'chat');
 
 // $request = $zendesk->users->me();
 

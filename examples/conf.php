@@ -8,5 +8,10 @@ $config = [
     'subdomain' => $_ENV['ZENDESK_SUBDOMAIN'],
     'user' => $_ENV['ZENDESK_USER'],
     'token' => $_ENV['ZENDESK_TOKEN'],
+    'modules' => [
+      'tickets' => ['comments'],
+      'search',
+      'users'
+    ]
   ]
 ];

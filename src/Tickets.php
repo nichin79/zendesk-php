@@ -2,95 +2,95 @@
 namespace Nichin79\Zendesk;
 
 use Nichin79\Curl\BasicCurl;
+use Nichin79\Zendesk\Tickets\Comments;
 
 class Tickets
 {
   protected array $data = [];
+
+  public Tickets\Comments $comments;
+
   public function __construct(array $data)
   {
     $this->data = $data;
+
+    $this->comments = new Comments($this->data);
+    // load_modules();
+    // \__NAMESPACE__::load_modules(__NAMESPACE__ . '\\Tickets\\', $this->data['modules']['tickets']);
+    // \Nichin79\Zendesk\Zendesk::load_modules(__NAMESPACE__ . '\\Tickets\\', $this->data['modules']['tickets']);
+
   }
 
   public function list()
   {
     $data = $this->data;
-    $data['method'] = 'GET';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets';
+    $data['url'] = sprintf('%s/tickets', $data['baseurl']);
     return new BasicCurl($data);
   }
 
   public function list_recent()
   {
     $data = $this->data;
-    $data['method'] = 'GET';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/recent';
+    $data['url'] = sprintf('%s/tickets/recent', $data['baseurl']);
     return new BasicCurl($data);
   }
 
   public function list_deleted()
   {
     $data = $this->data;
-    $data['method'] = 'GET';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/deleted_tickets';
+    $data['url'] = sprintf('%s/deleted_tickets', $data['baseurl']);
     return new BasicCurl($data);
   }
 
   public function count()
   {
     $data = $this->data;
-    $data['method'] = 'GET';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/count';
+    $data['url'] = sprintf('%s/tickets/count', $data['baseurl']);
     return new BasicCurl($data);
   }
 
   public function show(int $ticketId)
   {
     $data = $this->data;
-    $data['method'] = 'GET';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/' . $ticketId . '.json';
+    $data['url'] = sprintf('%s/tickets/%s.json', $data['baseurl'], $ticketId);
     return new BasicCurl($data);
   }
 
   public function show_many(array $ticketIds)
   {
-    $ticketIds = implode(',', $ticketIds);
     $data = $this->data;
-    $data['method'] = 'GET';
-    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/tickets/show_many.json?ids=$ticketIds";
+    $data['url'] = sprintf('%s/tickets/show_many.json?ids%s', $data['baseurl'], implode(',', $ticketIds));
     return new BasicCurl($data);
   }
 
-  public function create(string $data)
+  public function create(string $body)
   {
     $data = $this->data;
     $data['method'] = 'POST';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets.json';
-    $data['headers'] = ["Content-Type: application/json"];
-    $data['data'] = $data;
+    $data['url'] = sprintf('%s/tickets.json', $data['baseurl']);
+    $data['data'] = $body;
     return new BasicCurl($data);
   }
 
-  public function create_many(string $data)
+  public function create_many(string $body)
   {
     $data = $this->data;
     $data['method'] = 'POST';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/create_many.json';
-    $data['headers'] = ["Content-Type: application/json"];
-    $data['data'] = $data;
+    $data['url'] = sprintf('%s/tickets/create_many.json', $data['baseurl']);
+    $data['data'] = $body;
     return new BasicCurl($data);
   }
 
-  public function update(int $ticketId, string $data)
+  public function update(int $ticketId, string $body)
   {
     $data = $this->data;
     $data['method'] = 'PUT';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/' . $ticketId . '.json';
-    $data['headers'] = ["Content-Type: application/json"];
-    $data['data'] = $data;
+    $data['url'] = sprintf('%s/tickets/%s.json', $data['baseurl'], $ticketId);
+    $data['data'] = $body;
     return new BasicCurl($data);
   }
 
-  public function update_many(array $ticketIds, string $data)
+  public function update_many(array $ticketIds, string $body)
   {
     // IMPORTANT NOTE!
     // The ticket id's should only be specified in either $ticketIds or in $data, not a combination of both
@@ -103,28 +103,25 @@ class Tickets
 
     $data = $this->data;
     $data['method'] = 'PUT';
-    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/tickets/update_many.json$ids";
-    $data['headers'] = ["Content-Type: application/json"];
-    $data['data'] = $data;
+    $data['url'] = sprintf('%s/tickets/update_many.json%s', $data['baseurl'], $ids);
+    $data['data'] = $body;
 
-    var_dump($data);
-    return new BasicCurl($data);
+    return new BasicCurl($this->data);
   }
 
   public function delete(int $ticketId)
   {
     $data = $this->data;
     $data['method'] = 'DELETE';
-    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/tickets/$ticketId.json";
+    $data['url'] = sprintf('%s/tickets/%s.json', $data['baseurl'], $ticketId);
     return new BasicCurl($data);
   }
 
   public function delete_many(array $ticketIds)
   {
-    $ticketIds = implode(',', $ticketIds);
     $data = $this->data;
     $data['method'] = 'DELETE';
-    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/tickets/destroy_many?ids=$ticketIds";
+    $data['url'] = sprintf('%s/tickets/destroy_many?ids=%s', $data['baseurl'], implode(',', $ticketIds));
     return new BasicCurl($data);
   }
 
@@ -132,16 +129,15 @@ class Tickets
   {
     $data = $this->data;
     $data['method'] = 'PUT';
-    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/deleted_tickets/$ticketId/restore.json";
+    $data['url'] = sprintf('%s/deleted_tickets/%s/restore.json', $data['baseurl'], $ticketId);
     return new BasicCurl($data);
   }
 
   public function restore_many(array $ticketIds)
   {
-    $ticketIds = implode(',', $ticketIds);
     $data = $this->data;
     $data['method'] = 'PUT';
-    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/deleted_tickets/restore_many?ids=$ticketIds";
+    $data['url'] = sprintf('%s/deleted_tickets/restore_many?ids=%s', $data['baseurl'], implode(',', $ticketIds));
     return new BasicCurl($data);
   }
 
@@ -149,16 +145,33 @@ class Tickets
   {
     $data = $this->data;
     $data['method'] = 'DELETE';
-    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/deleted_tickets/$ticketId.json";
+    $data['url'] = sprintf('%s/deleted_tickets/%s.json', $data['baseurl'], $ticketId);
     return new BasicCurl($data);
   }
 
   public function delete_many_permanently(array $ticketIds)
   {
-    $ticketIds = implode(',', $ticketIds);
     $data = $this->data;
     $data['method'] = 'DELETE';
-    $data['url'] = 'https://' . $data['subdomain'] . ".zendesk.com/api/v2/deleted_tickets/destroy_many?ids=$ticketIds";
+    $data['url'] = sprintf('%s/deleted_tickets/destroy_many?ids=%s', $data['baseurl'], implode(',', $ticketIds));
     return new BasicCurl($data);
+  }
+
+  /*
+   * ALIAS FUNCTIONS
+   */
+  public function recent()
+  {
+    return $this->list_recent();
+  }
+
+  public function deleted()
+  {
+    return $this->list_deleted();
+  }
+
+  public function comments(int $ticketId)
+  {
+    return $this->comments->list($ticketId);
   }
 }

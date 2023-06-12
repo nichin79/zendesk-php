@@ -1,8 +1,6 @@
 <?php
 namespace Nichin79\Zendesk;
 
-use Nichin79\Curl\BasicCurl;
-
 class Zendesk
 {
   protected array $data = [];
@@ -13,34 +11,54 @@ class Zendesk
 
   public function __construct(array $conf)
   {
-    $this->data['subdomain'] = $conf['subdomain'];
+    /* Check for subdomain or throw error */
+    if (isset($conf['subdomain']) || !empty($conf['subdomain'])) {
+      $this->data['baseurl'] = sprintf('https://%s.zendesk.com/api/v2', $conf['subdomain']);
+    } else {
+      throw new \InvalidArgumentException('Zendesk subdomain missing or not set');
+    }
 
+    /* Check for credentials or throw error */
     if ((isset($conf['user']) && !empty($conf['user'])) && (isset($conf['pass']) && !empty($conf['pass']))) {
       $this->data['options']['userpwd'] = $conf['user'] . ':' . $conf['pass'];
-    }
-
-    if ((isset($conf['user']) && !empty($conf['user'])) && (isset($conf['token']) && !empty($conf['token']))) {
+    } else if ((isset($conf['user']) && !empty($conf['user'])) && (isset($conf['token']) && !empty($conf['token']))) {
       $this->data['options']['userpwd'] = $conf['user'] . '/token:' . $conf['token'];
+    } else {
+      throw new \InvalidArgumentException('Zendesk credentials missing or not set');
     }
 
-    $this->tickets = new Tickets($this->data);
-    $this->search = new Search($this->data);
-    $this->users = new Users($this->data);
+    $this->data['headers'] = ["Content-Type: application/json"];
+    $this->data['modules'] = $conf['modules'];
+    $this->load_modules(__NAMESPACE__, $conf['modules']);
+  }
+
+  public function load_modules(string $namespace, mixed $modules)
+  {
+    foreach ($modules as $key => $value) {
+      if (gettype($modules[$key]) === 'array') {
+        $this->init_module($namespace, $key);
+      }
+
+      if (gettype($modules[$key]) === 'string') {
+        $this->init_module($namespace, $value);
+      }
+    }
+  }
+
+  public function init_module(string $namespace, string $module)
+  {
+    $module = strtolower($module);
+    $class = $namespace . '\\' . ucfirst(strtolower($module));
+    $this->$module = new $class($this->data);
   }
 
   public function tickets()
   {
-    $data = $this->data;
-    $data['method'] = 'GET';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/tickets/';
-    return new BasicCurl($data);
+    return $this->tickets->list();
   }
 
   public function users()
   {
-    $data = $this->data;
-    $data['method'] = 'GET';
-    $data['url'] = 'https://' . $data['subdomain'] . '.zendesk.com/api/v2/users';
-    return new BasicCurl($data);
+    return $this->users->list();
   }
 }

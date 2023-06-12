@@ -18,7 +18,7 @@ foreach ($tickets->response()['results'] as $ticket) {
   $requesterArr[] = $ticket['requester_id'];
 }
 
-$users = $zendesk->users->showMany($requesterArr);
+$users = $zendesk->users->show_many($requesterArr);
 foreach ($users->response()['users'] as $user) {
   echo json_encode($user) . "\r\n\r\n";
 }
