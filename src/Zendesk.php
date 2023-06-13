@@ -30,27 +30,34 @@ class Zendesk
     $this->data['headers'] = ["Content-Type: application/json"];
     $this->data['modules'] = $conf['modules'];
 
-    foreach ($this->data['modules'] as $key => $value) {
-      if (gettype($conf['modules'][$key]) === 'array') {
-        $class = ucfirst(strtolower($key));
-      }
-      if (gettype($conf['modules'][$key]) === 'string') {
-        $class = ucfirst(strtolower($value));
-      }
-
-      switch ($class) {
-        case 'Tickets';
+    foreach (Zendesk::get_modules($this->data['modules']) as $module) {
+      switch ($module) {
+        case 'tickets';
           $this->tickets = new Tickets($this->data);
           break;
-        case 'Search';
+        case 'search';
           $this->search = new Search($this->data);
           break;
-        case 'Users';
+        case 'users';
           $this->users = new Users($this->data);
           break;
       }
     }
+  }
 
+  public static function get_modules(array $array)
+  {
+    $modules = [];
+    foreach ($array as $key => $value) {
+      if (gettype($array[$key]) === 'array') {
+        $modules[] = strtolower($key);
+      }
+
+      if (gettype($array[$key]) === 'string') {
+        $modules[] = strtolower($value);
+      }
+    }
+    return $modules;
   }
 
   public function tickets()

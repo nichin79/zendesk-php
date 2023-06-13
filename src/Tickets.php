@@ -3,32 +3,34 @@ namespace Nichin79\Zendesk;
 
 use Nichin79\Curl\BasicCurl;
 use Nichin79\Zendesk\Tickets\Comments;
+use Nichin79\Zendesk\Tickets\Forms;
+use Nichin79\Zendesk\Tickets\Metrics;
 
 class Tickets
 {
   protected array $data = [];
 
   public Tickets\Comments $comments;
+  public Tickets\Forms $forms;
+  public Tickets\Metrics $metrics;
 
   public function __construct(array $data)
   {
     $this->data = $data;
 
-    foreach ($this->data['modules']['tickets'] as $key => $value) {
-      if (gettype($this->data['modules']['tickets'][$key]) === 'array') {
-        $class = ucfirst(strtolower($key));
-      }
-      if (gettype($this->data['modules']['tickets'][$key]) === 'string') {
-        $class = ucfirst(strtolower($value));
-      }
-
-      switch ($class) {
-        case 'Comments';
+    foreach (Zendesk::get_modules($this->data['modules']['tickets']) as $module) {
+      switch ($module) {
+        case 'comments';
           $this->comments = new Comments($this->data);
+          break;
+        case 'forms';
+          $this->forms = new Forms($this->data);
+          break;
+        case 'metrics';
+          $this->metrics = new Metrics($this->data);
           break;
       }
     }
-
   }
 
   public function list()
@@ -70,6 +72,13 @@ class Tickets
   {
     $data = $this->data;
     $data['url'] = sprintf('%s/tickets/show_many.json?ids%s', $data['baseurl'], implode(',', $ticketIds));
+    return new BasicCurl($data);
+  }
+
+  public function metrics(int $ticketId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/tickets/%s/metrics', $data['baseurl'], $ticketId);
     return new BasicCurl($data);
   }
 
@@ -183,5 +192,10 @@ class Tickets
   public function comments(int $ticketId)
   {
     return $this->comments->list($ticketId);
+  }
+
+  public function forms(array $params = [])
+  {
+    return $this->forms->list($params);
   }
 }

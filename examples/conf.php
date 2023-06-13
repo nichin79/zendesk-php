@@ -9,7 +9,7 @@ $config = [
     'user' => $_ENV['ZENDESK_USER'],
     'token' => $_ENV['ZENDESK_TOKEN'],
     'modules' => [
-      'tickets' => ['comments'],
+      'tickets' => ['comments', 'forms', 'metrics'],
       'search',
       'users'
     ]

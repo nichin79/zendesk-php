@@ -50,7 +50,15 @@ $zendesk = new Zendesk($config['zendesk']);
 // $output = $zendesk->tickets->delete_many_permanently([6201, 6202]);
 
 
-// $request = $zendesk->tickets->comments(6211);
+$request = $zendesk->tickets->metrics(6211);
+
+// $request = $zendesk->tickets->forms->list(['active' => true]);
+
+$okArr = [200, 201, 204];
+if (in_array($request->httpcode(), $okArr)) {
+  $request->jsonPrint(1);
+}
+
 // $request = $zendesk->tickets->comments->list(6199);
 // $request = $zendesk->tickets->comments->count(6199);
 // $request = $zendesk->tickets->comments->make_private(6211, 11925100328850);
