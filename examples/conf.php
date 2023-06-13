@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-
 (new Nichin79\DotEnv\DotEnv(__DIR__ . '/../.env'))->load();
 $config = [
   'zendesk' => [
@@ -9,9 +8,11 @@ $config = [
     'user' => $_ENV['ZENDESK_USER'],
     'token' => $_ENV['ZENDESK_TOKEN'],
     'modules' => [
-      'tickets' => ['comments', 'forms', 'metrics'],
+      'tickets' => ['comments', 'forms', 'fields', 'metrics'],
       'search',
       'users'
     ]
   ]
 ];
+
+$okStatus = [200, 201, 204];

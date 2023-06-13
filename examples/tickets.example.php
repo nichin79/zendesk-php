@@ -50,12 +50,11 @@ $zendesk = new Zendesk($config['zendesk']);
 // $output = $zendesk->tickets->delete_many_permanently([6201, 6202]);
 
 
-$request = $zendesk->tickets->metrics(6211);
+// $request = $zendesk->tickets->metrics(6211);
 
-// $request = $zendesk->tickets->forms->list(['active' => true]);
+$request = $zendesk->tickets->show(6211);
 
-$okArr = [200, 201, 204];
-if (in_array($request->httpcode(), $okArr)) {
+if (in_array($request->httpcode(), $okStatus)) {
   $request->jsonPrint(1);
 }
 

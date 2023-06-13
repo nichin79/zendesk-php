@@ -4,6 +4,7 @@ namespace Nichin79\Zendesk;
 use Nichin79\Curl\BasicCurl;
 use Nichin79\Zendesk\Tickets\Comments;
 use Nichin79\Zendesk\Tickets\Forms;
+use Nichin79\Zendesk\Tickets\Fields;
 use Nichin79\Zendesk\Tickets\Metrics;
 
 class Tickets
@@ -12,6 +13,7 @@ class Tickets
 
   public Tickets\Comments $comments;
   public Tickets\Forms $forms;
+  public Tickets\Fields $fields;
   public Tickets\Metrics $metrics;
 
   public function __construct(array $data)
@@ -25,6 +27,9 @@ class Tickets
           break;
         case 'forms';
           $this->forms = new Forms($this->data);
+          break;
+        case 'fields';
+          $this->fields = new Fields($this->data);
           break;
         case 'metrics';
           $this->metrics = new Metrics($this->data);
@@ -197,5 +202,10 @@ class Tickets
   public function forms(array $params = [])
   {
     return $this->forms->list($params);
+  }
+
+  public function fields(array $params = [])
+  {
+    return $this->fields->list($params);
   }
 }
