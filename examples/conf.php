@@ -10,7 +10,7 @@ $config = [
     'modules' => [
       'tickets' => ['comments', 'forms', 'fields', 'metrics'],
       'search',
-      'users'
+      'users' => ['identities']
     ]
   ]
 ];
