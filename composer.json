@@ -15,7 +15,7 @@
       }
     },
     "require": {
-        "nichin79/curl": "^v1.0.0",
-        "nichin79/dotenv": "^v1.0.0"
+        "nichin79/dotenv": "dev-main",
+        "nichin79/curl": "dev-main"
     }
 }
