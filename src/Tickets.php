@@ -2,6 +2,7 @@
 namespace Nichin79\Zendesk;
 
 use Nichin79\Curl\BasicCurl;
+use Nichin79\Zendesk\Tickets\Attachments;
 use Nichin79\Zendesk\Tickets\Comments;
 use Nichin79\Zendesk\Tickets\Forms;
 use Nichin79\Zendesk\Tickets\Fields;
@@ -11,6 +12,7 @@ class Tickets
 {
   protected array $data = [];
 
+  public Tickets\Attachments $attachments;
   public Tickets\Comments $comments;
   public Tickets\Forms $forms;
   public Tickets\Fields $fields;
@@ -22,6 +24,9 @@ class Tickets
 
     foreach (Zendesk::get_modules($this->data['modules']['tickets']) as $module) {
       switch ($module) {
+        case 'attachments';
+          $this->attachments = new Attachments($this->data);
+          break;
         case 'comments';
           $this->comments = new Comments($this->data);
           break;

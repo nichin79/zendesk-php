@@ -8,7 +8,7 @@ $config = [
     'user' => $_ENV['ZENDESK_USER'],
     'token' => $_ENV['ZENDESK_TOKEN'],
     'modules' => [
-      'tickets' => ['comments', 'forms', 'fields', 'metrics'],
+      'tickets' => ['attachments', 'comments', 'forms', 'fields', 'metrics'],
       'search',
       'users'
     ]

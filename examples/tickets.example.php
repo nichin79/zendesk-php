@@ -52,7 +52,7 @@ $zendesk = new Zendesk($config['zendesk']);
 
 // $request = $zendesk->tickets->metrics(6211);
 
-$request = $zendesk->tickets->show(6211);
+$request = $zendesk->tickets->show(6332);
 
 if (in_array($request->httpcode(), $okStatus)) {
   $request->jsonPrint(1);
