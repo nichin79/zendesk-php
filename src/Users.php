@@ -2,14 +2,24 @@
 namespace Nichin79\Zendesk;
 
 use Nichin79\Curl\BasicCurl;
-
+use Nichin79\Zendesk\Users\Identities;
 
 class Users
 {
   protected array $data = [];
+  public Users\Identities $identities;
+
   public function __construct(array $data)
   {
     $this->data = $data;
+
+    foreach (Zendesk::get_modules($this->data['modules']['users']) as $module) {
+      switch ($module) {
+        case 'identities';
+          $this->identities = new Identities($this->data);
+          break;
+      }
+    }
   }
 
   public function list()
