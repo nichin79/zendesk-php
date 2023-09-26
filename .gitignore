@@ -1,3 +1,7 @@
+# Misc files
+examples/customers/
+*customer.*
+
 # Composer artifact files
 vendor/
 composer.lock
