@@ -53,12 +53,11 @@ class Comments
     return new BasicCurl($data);
   }
 
-  public function chat_file_redactions(int $ticketId, string $body)
+  public function chat_file_redactions(int $ticketId)
   {
     $data = $this->data;
     $data['method'] = 'PUT';
     $data['url'] = sprintf('%s/chat_file_redactions/%s', $data['baseurl'], $ticketId);
-    $data['data'] = $body;
     return new BasicCurl($data);
   }
 
