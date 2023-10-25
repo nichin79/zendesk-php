@@ -1,5 +1,5 @@
 <?php
-namespace Nichin79\Zendesk\Tickets;
+namespace Nichin79\Zendesk\Ticketing\Tickets;
 
 use Nichin79\Curl\BasicCurl;
 

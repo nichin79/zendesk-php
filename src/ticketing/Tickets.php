@@ -1,13 +1,13 @@
 <?php
-namespace Nichin79\Zendesk;
+namespace Nichin79\Zendesk\Ticketing;
 
 use Nichin79\Curl\BasicCurl;
-use Nichin79\Zendesk\Tickets\Attachments;
-use Nichin79\Zendesk\Tickets\Comments;
-use Nichin79\Zendesk\Tickets\Forms;
-use Nichin79\Zendesk\Tickets\Fields;
-use Nichin79\Zendesk\Tickets\Metrics;
-use Nichin79\Zendesk\Tickets\Requests;
+use Nichin79\Zendesk\Ticketing\Tickets\Attachments;
+use Nichin79\Zendesk\Ticketing\Tickets\Comments;
+use Nichin79\Zendesk\Ticketing\Tickets\Forms;
+use Nichin79\Zendesk\Ticketing\Tickets\Fields;
+use Nichin79\Zendesk\Ticketing\Tickets\Metrics;
+use Nichin79\Zendesk\Ticketing\Tickets\Requests;
 
 class Tickets
 {
@@ -24,7 +24,7 @@ class Tickets
   {
     $this->data = $data;
 
-    foreach (Zendesk::get_modules($this->data['modules']['tickets']) as $module) {
+    foreach (\Nichin79\Zendesk\Zendesk::get_modules($this->data['modules']['ticketing']['tickets']) as $module) {
       switch ($module) {
         case 'attachments';
           $this->attachments = new Attachments($this->data);

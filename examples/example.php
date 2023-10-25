@@ -5,37 +5,37 @@ use Nichin79\Zendesk\Zendesk;
 
 $zendesk = new Zendesk($config['zendesk']);
 
+// Export/query users where email is test@test.com
 $users = $zendesk->search->export([
   'page[size]' => 100,
   'filter[type]' => 'user',
-  'query' => 'nicklas.hintze@theservicecorporation.com',
+  'query' => 'test@test.com',
   'page[after]' => '',
 ]);
 
-foreach ($users->response()['results'] as $user) {
-  echo "UserId:" . $user['id'] . "\r\n";
+// Loop through each user
+foreach ($users->response('json')->results as $user) {
+  echo "userId: " . $user->id . "\r\n"
+    . "userName: " . $user->name . "\r\n";
 
-  $identities = $zendesk->users->identities->list_user_identities($user['id']);
+  // Retrieve user identities
+  $identities = $zendesk->users->identities->list_user_identities($user->id);
 
-  foreach ($identities->response()['identities'] as $identity) {
+  // Loop through each identity and check for email that contains @test.se
+  foreach ($identities->response('json')->identities as $identity) {
     if (
-      $identity['type'] === 'email' &&
-      str_contains($identity['value'], '@imagineit.nu') &&
-      $identity['primary'] === false
+      $identity->type === 'email' &&
+      str_contains($identity->value, '@test.se') &&
+      $identity->primary === false
     ) {
-      echo "IdentityId:" . $identity['id'] . "\r\n";
+      echo "->identityId: " . $identity->id . "\r\n"
+        . "->identityEmail: " . $identity->value . "\r\n";
     }
+  }
 
-    // if ($identity['type'] === 'email' && str_contains($identity['value'], '@theservicecorporation.com')) {
-    //   echo "IdentityId:" . $identity['id'] . "\r\n";
-
-    //   $setPrimary = $zendesk->users->identities->make_user_identity_primary($user['id'], $identity['id']);
-    // }
-
-    // if ($identity['type'] === 'email' && str_contains($identity['value'], '@imagineit.nu')) {
-    //   echo "IdentityId:" . $identity['id'] . "\r\n";
-
-    //   $delete = $zendesk->users->identities->delete_user_identity($user['id'], $identity['id']);
-    // }
+  // Retrieve and loop through tickets for the user
+  $tickets = $zendesk->tickets->list_user_requested($user->id);
+  foreach ($tickets->response('json')->tickets as $ticket) {
+    echo "\r\n" . "ticket: " . $ticket->id . " - " . $ticket->subject . "\r\n";
   }
 }

@@ -8,9 +8,11 @@ $config = [
     'user' => $_ENV['ZENDESK_USER'],
     'token' => $_ENV['ZENDESK_TOKEN'],
     'modules' => [
-      'tickets' => ['attachments', 'comments', 'forms', 'fields', 'metrics', 'requests'],
-      'search',
-      'users' => ['identities']
+      'ticketing' => [
+        'tickets' => [],
+        'search',
+        'users' => ['identities']
+      ]
     ]
   ]
 ];

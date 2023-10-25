@@ -5,9 +5,9 @@ class Zendesk
 {
   protected array $data = [];
 
-  public Tickets $tickets;
-  public Search $search;
-  public Users $users;
+  public Ticketing\Tickets $tickets;
+  public Ticketing\Search $search;
+  public Ticketing\Users $users;
 
   public string $baseProtocol = "https";
   public string $basePath = ".zendesk.com/api/v2";
@@ -38,15 +38,22 @@ class Zendesk
 
     foreach (Zendesk::get_modules($this->data['modules']) as $module) {
       switch ($module) {
-        case 'tickets';
-          $this->tickets = new Tickets($this->data);
+        case 'ticketing':
+          foreach (Zendesk::get_modules($this->data['modules'][$module]) as $subModule) {
+            switch ($subModule) {
+              case 'tickets';
+                $this->tickets = new Ticketing\Tickets($this->data);
+                break;
+              case 'search';
+                $this->search = new Ticketing\Search($this->data);
+                break;
+              case 'users';
+                $this->users = new Ticketing\Users($this->data);
+                break;
+            }
+          }
           break;
-        case 'search';
-          $this->search = new Search($this->data);
-          break;
-        case 'users';
-          $this->users = new Users($this->data);
-          break;
+
       }
     }
   }
@@ -64,15 +71,5 @@ class Zendesk
       }
     }
     return $modules;
-  }
-
-  public function tickets()
-  {
-    return $this->tickets->list();
-  }
-
-  public function users()
-  {
-    return $this->users->list();
   }
 }

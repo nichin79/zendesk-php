@@ -1,8 +1,8 @@
 <?php
-namespace Nichin79\Zendesk;
+namespace Nichin79\Zendesk\Ticketing;
 
 use Nichin79\Curl\BasicCurl;
-use Nichin79\Zendesk\Users\Identities;
+use Nichin79\Zendesk\Ticketing\Users\Identities;
 
 class Users
 {
@@ -13,7 +13,7 @@ class Users
   {
     $this->data = $data;
 
-    foreach (Zendesk::get_modules($this->data['modules']['users']) as $module) {
+    foreach (\Nichin79\Zendesk\Zendesk::get_modules($this->data['modules']['ticketing']['users']) as $module) {
       switch ($module) {
         case 'identities';
           $this->identities = new Identities($this->data);
