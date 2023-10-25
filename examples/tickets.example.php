@@ -52,11 +52,11 @@ $zendesk = new Zendesk($config['zendesk']);
 
 // $request = $zendesk->tickets->metrics(6211);
 
-$request = $zendesk->tickets->show(6332);
+// $request = $zendesk->tickets->show(6332);
 
-if (in_array($request->httpcode(), $okStatus)) {
-  $request->jsonPrint(1);
-}
+// if (in_array($request->httpcode(), $okStatus)) {
+//   $request->jsonPrint(1);
+// }
 
 // $request = $zendesk->tickets->comments->list(6199);
 // $request = $zendesk->tickets->comments->count(6199);
@@ -68,3 +68,7 @@ if (in_array($request->httpcode(), $okStatus)) {
 // echo json_encode($request->response(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 // echo "\r\n";
 // echo $request->httpcode();
+
+$request = $zendesk->tickets->requests->list_user(374834345140);
+$request->jsonPrint();
+// $request->jsonFile('requests.json', 1);

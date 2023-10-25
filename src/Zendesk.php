@@ -9,11 +9,17 @@ class Zendesk
   public Search $search;
   public Users $users;
 
+  public string $baseProtocol = "https";
+  public string $basePath = ".zendesk.com/api/v2";
+
   public function __construct(array $conf)
   {
     /* Check for subdomain or throw error */
     if (isset($conf['subdomain']) || !empty($conf['subdomain'])) {
-      $this->data['baseurl'] = sprintf('https://%s.zendesk.com/api/v2', $conf['subdomain']);
+      $this->data['baseprotocol'] = $this->baseProtocol;
+      $this->data['basepath'] = $this->basePath;
+      $this->data['subdomain'] = $conf['subdomain'];
+      $this->data['baseurl'] = sprintf('%s://%s%s', $this->baseProtocol, $conf['subdomain'], $this->basePath);
     } else {
       throw new \InvalidArgumentException('Zendesk subdomain missing or not set');
     }

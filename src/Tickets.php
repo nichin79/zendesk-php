@@ -7,6 +7,7 @@ use Nichin79\Zendesk\Tickets\Comments;
 use Nichin79\Zendesk\Tickets\Forms;
 use Nichin79\Zendesk\Tickets\Fields;
 use Nichin79\Zendesk\Tickets\Metrics;
+use Nichin79\Zendesk\Tickets\Requests;
 
 class Tickets
 {
@@ -17,6 +18,7 @@ class Tickets
   public Tickets\Forms $forms;
   public Tickets\Fields $fields;
   public Tickets\Metrics $metrics;
+  public Tickets\Requests $requests;
 
   public function __construct(array $data)
   {
@@ -39,6 +41,9 @@ class Tickets
         case 'metrics';
           $this->metrics = new Metrics($this->data);
           break;
+        case 'requests';
+          $this->requests = new Requests($this->data);
+          break;
       }
     }
   }
@@ -47,6 +52,34 @@ class Tickets
   {
     $data = $this->data;
     $data['url'] = sprintf('%s/tickets', $data['baseurl']);
+    return new BasicCurl($data);
+  }
+
+  public function list_user_requested(int $userId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/users/%s/tickets/requested', $data['baseurl'], $userId);
+    return new BasicCurl($data);
+  }
+
+  public function list_user_ccd(int $userId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/users/%s/tickets/ccd', $data['baseurl'], $userId);
+    return new BasicCurl($data);
+  }
+
+  public function list_user_followed(int $userId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/users/%s/tickets/followed', $data['baseurl'], $userId);
+    return new BasicCurl($data);
+  }
+
+  public function list_user_assigned(int $userId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/users/%s/tickets/assigned', $data['baseurl'], $userId);
     return new BasicCurl($data);
   }
 
@@ -68,6 +101,27 @@ class Tickets
   {
     $data = $this->data;
     $data['url'] = sprintf('%s/tickets/count', $data['baseurl']);
+    return new BasicCurl($data);
+  }
+
+  public function count_organization(int $orgId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/organizations/%s/tickets/count', $data['baseurl'], $orgId);
+    return new BasicCurl($data);
+  }
+
+  public function count_user_ccd(int $userId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/users/%s/tickets/ccd/count', $data['baseurl'], $userId);
+    return new BasicCurl($data);
+  }
+
+  public function count_user_assigned(int $userId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/users/%s/tickets/assigned/count', $data['baseurl'], $userId);
     return new BasicCurl($data);
   }
 

@@ -29,38 +29,24 @@ class Users
     return new BasicCurl($data);
   }
 
+  public function list_group(int $groupId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/groups/%s/users', $data['baseurl'], $groupId);
+    return new BasicCurl($data);
+  }
+
+  public function list_organization(int $organizationId)
+  {
+    $data = $this->data;
+    $data['url'] = sprintf('%s/organization/%s/users', $data['baseurl'], $organizationId);
+    return new BasicCurl($data);
+  }
+
   public function list_deleted()
   {
     $data = $this->data;
     $data['url'] = sprintf('%s/deleted_users.json', $data['baseurl']);
-    return new BasicCurl($data);
-  }
-
-  public function tickets_requested(int $userId)
-  {
-    $data = $this->data;
-    $data['url'] = sprintf('%s/users/%s/tickets/requested', $data['baseurl'], $userId);
-    return new BasicCurl($data);
-  }
-
-  public function tickets_ccd(int $userId)
-  {
-    $data = $this->data;
-    $data['url'] = sprintf('%s/users/%s/tickets/ccd', $data['baseurl'], $userId);
-    return new BasicCurl($data);
-  }
-
-  public function tickets_followed(int $userId)
-  {
-    $data = $this->data;
-    $data['url'] = sprintf('%s/users/%s/tickets/followed', $data['baseurl'], $userId);
-    return new BasicCurl($data);
-  }
-
-  public function tickets_assigned(int $userId)
-  {
-    $data = $this->data;
-    $data['url'] = sprintf('%s/users/%s/tickets/assigned', $data['baseurl'], $userId);
     return new BasicCurl($data);
   }
 
