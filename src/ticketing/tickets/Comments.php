@@ -12,10 +12,10 @@ class Comments
     $this->data = $data;
   }
 
-  public function list(int $ticketId)
+  public function list(int $ticketId, int $page = 1)
   {
     $data = $this->data;
-    $data['url'] = sprintf('%s/tickets/%s/comments', $data['baseurl'], $ticketId);
+    $data['url'] = sprintf('%s/tickets/%s/comments?page=%s', $data['baseurl'], $ticketId, $page);
     return new BasicCurl($data);
   }
 
