@@ -253,9 +253,9 @@ class Tickets
     return $this->list_deleted();
   }
 
-  public function comments(int $ticketId, int $page = 1)
+  public function comments(int $ticketId, array $params = [])
   {
-    return $this->comments->list($ticketId, $page);
+    return $this->comments->list($ticketId, $params);
   }
 
   public function forms(array $params = [])
