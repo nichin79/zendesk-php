@@ -8,6 +8,7 @@ class Zendesk
   public Ticketing\Tickets $tickets;
   public Ticketing\Search $search;
   public Ticketing\Users $users;
+  public Helpcenter\Helpcenter $helpcenter;
 
   public string $baseProtocol = "https";
   public string $basePath = ".zendesk.com/api/v2";
@@ -49,6 +50,16 @@ class Zendesk
                 break;
               case 'users';
                 $this->users = new Ticketing\Users($this->data);
+                break;
+            }
+          }
+          break;
+
+        case 'helpcenter':
+          foreach (Zendesk::get_modules($this->data['modules'][$module]) as $subModule) {
+            switch ($subModule) {
+              case 'helpcenter';
+                $this->helpcenter = new Helpcenter\Helpcenter($this->data);
                 break;
             }
           }

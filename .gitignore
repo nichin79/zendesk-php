@@ -4,6 +4,9 @@ test*
 customers/
 *customer.*
 
+# VS Code files
+.vscode
+
 # Composer artifact files
 vendor/
 composer.lock
