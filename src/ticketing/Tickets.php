@@ -135,7 +135,7 @@ class Tickets
   public function show_many(array $ticketIds)
   {
     $data = $this->data;
-    $data['url'] = sprintf('%s/tickets/show_many.json?ids%s', $data['baseurl'], implode(',', $ticketIds));
+    $data['url'] = sprintf('%s/tickets/show_many.json?ids=%s', $data['baseurl'], implode(',', $ticketIds));
     return new BasicCurl($data);
   }
 
