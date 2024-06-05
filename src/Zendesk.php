@@ -8,6 +8,8 @@ class Zendesk
   public Ticketing\Tickets $tickets;
   public Ticketing\Search $search;
   public Ticketing\Users $users;
+  public Ticketing\Organizations $organizations;
+  public Ticketing\Groups $groups;
   public Helpcenter\Helpcenter $helpcenter;
 
   public string $baseProtocol = "https";
@@ -50,6 +52,12 @@ class Zendesk
                 break;
               case 'users';
                 $this->users = new Ticketing\Users($this->data);
+                break;
+              case 'organizations';
+                $this->organizations = new Ticketing\Organizations($this->data);
+                break;
+              case 'groups';
+                $this->groups = new Ticketing\Groups($this->data);
                 break;
             }
           }

@@ -18,6 +18,7 @@ class Identities
    *
    * @param integer $userId  The id of the user
    * @param string $endpoint  users / end_users
+   * @return BasicCurl
    */
   public function list(int $userId, string $endpoint = 'users')
   {
@@ -33,6 +34,7 @@ class Identities
    * @param integer $userId  The id of the user
    * @param integer $identityId  The ID of the user identity
    * @param string $endpoint  users / end_users
+   * @return BasicCurl
    */
   public function show(int $userId, int $identityId, string $endpoint = 'users')
   {
@@ -48,6 +50,7 @@ class Identities
    * @param integer $userId  The id of the user
    * @param string $body  The json body of the identity to create
    * @param string $endpoint  users / end_users
+   * @return BasicCurl
    */
   public function create(int $userId, string $body, string $endpoint = 'users')
   {
@@ -67,6 +70,7 @@ class Identities
    * @param integer $userId  The id of the user
    * @param integer $identityId  The ID of the user identity
    * @param string $body  The json body of the identity to create
+   * @return BasicCurl
    */
   public function update(int $userId, int $identityId, string $body)
   {
@@ -84,6 +88,7 @@ class Identities
    * @param integer $userId  The id of the user
    * @param integer $identityId  The ID of the user identity
    * @param string $endpoint  users / end_users
+   * @return BasicCurl
    */
   public function make_identity_primary(int $userId, int $identityId, string $endpoint = 'users')
   {
@@ -100,6 +105,7 @@ class Identities
    *
    * @param integer $userId  The id of the user
    * @param integer $identityId  The ID of the user identity
+   * @return BasicCurl
    */
   public function verify_identity(int $userId, int $identityId)
   {
@@ -116,6 +122,7 @@ class Identities
    * @param integer $userId  The id of the user
    * @param integer $identityId  The ID of the user identity
    * @param string $endpoint  users / end_users
+   * @return BasicCurl
    */
   public function request_user_verification(int $userId, int $identityId, string $endpoint = 'users')
   {
@@ -132,6 +139,7 @@ class Identities
    * @param integer $userId  The id of the user
    * @param integer $identityId  The ID of the user identity
    * @param string $endpoint  users / end_users
+   * @return BasicCurl
    */
   public function delete_identity(int $userId, int $identityId, string $endpoint = 'users')
   {
